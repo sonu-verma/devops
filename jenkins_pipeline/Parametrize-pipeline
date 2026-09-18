@@ -1,0 +1,17 @@
+pipeline {
+    agent any 
+    parameters {
+        string(name: 'tool', defaultValue: 'Jenkins', description: 'Tool name')
+        string(name: 'build_number', defaultValue: '1', description: 'Build Number')
+        choice(name: 'environment', choices: ['dev', 'qa', 'prod'], description: 'Select Option')
+    }
+    stages {
+        stage('Print parameters'){
+            steps {
+                echo "Tool Name is ${params.tool}"
+                echo "Build Number is ${params.build_number}"
+                echo "Environment is ${params.environment}"
+            }
+        }
+    }
+}

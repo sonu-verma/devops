@@ -1,0 +1,37 @@
+pipeline{
+    agent any
+    tools {
+        maven 'MyMaven'
+    }
+    parameters{
+        choice(name: 'ENV', choices: ['dev', 'qa'], description: 'Select the environment')
+    }
+    stages{
+        stage('Build code on dev ENV'){
+            // agent {
+            //     label testserver && testserver2
+            // }
+            when {
+                expression {
+                    params.ENV == 'dev'
+                }
+            }
+            steps {
+                git url: 'https://github.com/Sonal0409/DevOpsCodeDemo.git'
+                sh 'mvn pmd:pmd'
+                sh 'mvn package'
+            }
+        }
+        stage('Build code on dev QA'){
+            when {
+                expression {
+                    params.ENV == 'qa'
+                }
+            }
+            steps {
+                git url: 'https://github.com/Sonal0409/DevOpsCodeDemo.git'
+                sh 'mvn test'
+            }
+        }
+    }
+}
