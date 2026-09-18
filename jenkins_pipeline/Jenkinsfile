@@ -1,0 +1,31 @@
+// Write a pipeline script in jenkinsfile formate
+// This pipeline will build a java application using maven
+// compile code, review the code, convert pmd report, run test, and build code.
+
+pipeline {
+    agent any // any = any available VM where pipeline will be executed
+    // agent {
+    //     label 'linux-server' && 'windows-server'
+    // }
+    tools {
+        maven 'MyMaven'
+    }
+    stages {
+        stage('Clone the Repo'){
+            steps{
+                git branch: 'master', url: 'https://github.com/Sonal0409/DevOpsCodeDemo.git'
+            }
+        }
+        stage('Review Code'){
+            steps{
+                sh 'mvn pmd:pmd'  // Run pMD code analysis
+                // Generate PMD report - pmd.xml
+            }
+        }
+        stage('Build Code'){
+            steps{
+                sh 'mvn package'  // Run Maven package goal
+            }
+        }
+    }
+}
