@@ -1,0 +1,40 @@
+pipeline {
+    agent any 
+    tools {
+        maven 'MyMaven'
+    }
+    stages{
+        stage('Clone the repo'){
+            steps{
+                git 'https://github.com/Sonal0409/DevOpsCodeDemo.git'
+            }
+        }
+        stage('Review the code'){
+            steps{
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    retry(3){
+                        sh 'mvn pmd:Pmd'  // pmd.xml
+                    }
+                }
+            }
+            post {
+                success{
+                    recordIssues sourceCodeRetention: 'LAST_BUILD', tools: [pmdParser(pattern: '**/pmd.xml')] 
+                }
+            }
+        }
+        stage('Test code'){
+            steps{
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    sh 'mvn test'  // test.xml
+                }
+                
+            }
+        }
+        stage('Build code'){
+            steps{
+                sh 'mvn package'  // package.xml
+            }
+        }
+    }
+}
