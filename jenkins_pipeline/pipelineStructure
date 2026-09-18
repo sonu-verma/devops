@@ -1,0 +1,38 @@
+pipeline {
+    // All the code will be written in this block
+
+    agent {
+        // agent = a VM / a node/docker container
+        // this is mandatory section
+        // In this section we will write name of VM where we have to run the pipeline
+        // for now our agent is the current jenkins server
+    }
+
+    tools{
+        // It is optional section
+        // in this section we will write name of tools that pipeline will use to execute the 
+        // these tools are configures in jenins setting -tools
+    }
+
+    stages {
+        //it is mandatory
+        //names of jobs to be execute
+
+        stage('Fetch code){
+            steps{
+                // write the command to execute
+            }
+        }
+        stage('build Code'){
+            steps{
+                // write the build commands
+            }
+        }
+
+        stage('Deploy') {
+            steps{
+                // deploy steps
+            }
+        }
+    }
+}
