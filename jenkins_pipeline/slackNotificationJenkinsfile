@@ -1,0 +1,34 @@
+pipeline {
+    agent any
+    tools {
+        maven 'MyMaven'
+    }
+    stages {
+        stage('Clone Repo') {
+            steps {
+                git 'https://github.com/Sonal0409/DevOpsCodeDemo.git'
+            }
+            post {
+                success {
+                    slackSend channel: 'slack-jenkins-channel', message: 'Checkout completed successfully'
+                }
+                failure {
+                    slackSend channel: 'slack-jenkins-channel', message: 'Checkout failed'
+                }
+            }
+        }
+        stage('Build Code') {
+            steps {
+                sh 'mvn package'
+            }
+            post {
+                success {
+                    slackSend channel: 'slack-jenkins-channel', message: 'Build completed successfully'
+                }
+                failure {
+                    slackSend channel: 'slack-jenkins-channel', message: 'Build failed'
+                }
+            }
+        }
+    }
+}
